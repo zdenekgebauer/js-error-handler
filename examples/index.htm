@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>JS error handler example</h1>
+<p>
+    <button type="button" id="but1">error in nested function</button>
+    <button type="button" id="but2">error in another script</button>
+    <button type="button" id="but3">error in script from different domain</button>
+</p>
+<p>
+    <button type="button" id="butDisable">disable custom handler</button>
+    <button type="button" id="butEnable">enable custom handler</button>
+</p>
+
+<!-- error handler should be loaded before other scripts -->
+<script src="../src/error_handler.js" id="error-handler" data-alert="true" data-log="http://test.local/js-error-handler/examples/log/logger.php"></script>
+
+<!-- alternative configuration
+<script>
+    window.alertOnError = true;
+    window.sendErrorTo = window.location.href + 'examples/log/logger.php';
+</script>
+<script src="../src/error_handler.js"></script> -->
+
+<script>
+function doSomething() {
+    doSomethingAnother();
+}
+function doSomethingAnother() {
+    throw new Error('error message from nested function');
+}
+
+document.getElementById('but1').addEventListener('mousedown', function () {
+    doSomething();
+});
+document.getElementById('but2').addEventListener('mousedown', function () {
+    badFunction();
+});
+document.getElementById('but3').addEventListener('mousedown', function () {
+    differentDomainFunction();
+});
+
+document.getElementById('butDisable').addEventListener('mousedown', function () {
+    window.alertOnError = false;
+    window.sendErrorTo = '';
+});
+
+document.getElementById('butEnable').addEventListener('mousedown', function () {
+    window.alertOnError = true;
+});
+
+// error 'variable is not defined'
+console.log(variable);
+
+</script>
+<script src="bad_script.js"></script>
+<script src="http://example.org/different_domain_script.js"></script>
+</body>
+</html>
