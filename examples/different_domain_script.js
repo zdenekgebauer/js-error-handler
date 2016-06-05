@@ -1,4 +1,3 @@
 var differentDomainFunction = function () {
-	console.log(JSON.parse('invalid'));
+	foo();
 };
-console.log(invalid');

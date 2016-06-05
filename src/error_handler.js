@@ -12,12 +12,15 @@
 window.onerror = function (msg, url, line, col, error) {
 	var trace = (error !== undefined && error !== null ? error.stack : ''),
 		script = document.getElementById('error-handler'),
-		alertOnError = Boolean(script.getAttribute('data-alert') === 'true' || window.alertOnError),
+		alertOnError = Boolean(script.getAttribute('data-alert') === 'true'),
 		sendUrl = (script.getAttribute('data-log') == '' ? false : script.getAttribute('data-log'));
-
 	if (window.sendErrorTo !== undefined) {
 		sendUrl = (window.sendErrorTo === '' ? false : window.sendErrorTo);
 	}
+	if (window.alertOnError !== undefined) {
+		alertOnError = Boolean(window.alertOnError);
+	}
+
 	col = col ? col : '';
 
 	if (alertOnError) {
