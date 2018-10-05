@@ -28,11 +28,16 @@ window.onerror = function (msg, url, line, col, error) {
 	}
 
 	if (sendUrl) {
-		var request = new XMLHttpRequest();
-		request.open('POST', sendUrl, true);
-		request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-		request.send('msg=' + encodeURIComponent(msg) + '&url=' + url + '&line=' + line + '&col=' + col
-			+ '&trace=' + trace + '&page=' + encodeURIComponent(window.location.href));
+		var data = 'msg=' + encodeURIComponent(msg) + '&url=' + url + '&line=' + line + '&col=' + col
+			+ '&trace=' + trace + '&page=' + encodeURIComponent(window.location.href);
+		if (navigator.sendBeacon) {
+			navigator.sendBeacon(sendUrl, data);
+		} else {
+			var request = new XMLHttpRequest();
+			request.open('POST', sendUrl, true);
+			request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+			request.send(data);
+		}
 	}
 
 	return (alertOnError || sendUrl)
